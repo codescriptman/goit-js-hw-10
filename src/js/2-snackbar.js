@@ -10,12 +10,13 @@ const radioF = document.querySelector('input[value="fulfilled"]');
 const radioR = document.querySelector('input[value="rejected"]');
 const fieldset = document.querySelector('fieldset');
 const btn = document.querySelector('button');
+const form = document.querySelector('.form');
 //======================
 
 //!слушатели:
 ms.addEventListener('input', saveMs);
 fieldset.addEventListener('input', saveState);
-btn.addEventListener('submit', createPromise);
+form.addEventListener('submit', createPromise);
 
 //!handle functions:
 function saveMs() {
@@ -26,24 +27,32 @@ function saveState() {
   event.target === radioF || event.target === radioR;
   selectState = event.target.value;
 }
-//====================================
-function createPromise() {
-  event.preventDefault();
-  const prom = new Promise((resolve, reject) => {});
 
-  prom.then(greenIziToast(milliseconds));
-  prom.catch(redIziToast(milliseconds));
-}
-//show iziToasts, in delay will put milliseconds:
-function greenIziToast(delay) {
-  iziToast.show({
-    color: 'green',
-    message: `✅ Fulfilled promise in ${delay}ms`,
-  });
-}
-function redIziToast(delay) {
-  iziToast.show({
-    color: 'red',
-    message: `❌ Rejected promise in ${delay}ms`,
-  });
+function createPromise() {
+  event.target === btn;
+  event.preventDefault();
+  form.reset();
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (selectState === 'fulfilled') {
+        return resolve(milliseconds);
+      } else {
+        return reject(milliseconds);
+      }
+    }, milliseconds);
+  })
+    .then(function (delay) {
+      iziToast.show({
+        color: 'green',
+        message: `✅ Fulfilled promise in ${delay}ms`,
+        position: 'topRight',
+      });
+    })
+    .catch(function (delay) {
+      iziToast.show({
+        color: 'red',
+        message: `❌ Rejected promise in ${delay}ms`,
+        position: 'topRight',
+      });
+    });
 }
