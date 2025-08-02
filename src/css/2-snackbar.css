@@ -1,0 +1,83 @@
+.form {
+  display: flex;
+  width: 360px;
+  flex-direction: column;
+  align-content: stretch;
+}
+body > form > label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.04em;
+  color: #2e2f42;
+  width: 360px;
+}
+input[type='number'] {
+  border: 1px solid #808080;
+  border-radius: 4px;
+  width: 360px;
+  height: 40px;
+}
+input[type='number']:hover {
+  border: 1px solid #000;
+}
+input[type='number']:focus-visible {
+  border: 1px solid #4e75ff;
+}
+fieldset {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 48px;
+  border-radius: 4px;
+  stroke-width: 1px;
+  stroke: #808080;
+  width: 100%;
+  height: 78px;
+  margin-bottom: 20px;
+  padding: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+fieldset:hover,
+input[value='rejected']:hover,
+input[value='fulfilled']:hover {
+  stroke: #000;
+}
+
+fieldset > label > input:active {
+  color: #4e75ff;
+}
+
+legend {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.04em;
+  color: #2e2f42;
+  margin-left: 28px;
+  margin-bottom: 14px;
+}
+
+body > form > fieldset > label {
+  display: flex;
+  margin-bottom: 8px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  color: #2e2f42;
+}
+
+input[value='fulfilled'],
+input[value='rejected'] {
+  width: 20px;
+  height: 20px;
+}
+.form > button {
+  width: 100%;
+}
