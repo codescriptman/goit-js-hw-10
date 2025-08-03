@@ -8,7 +8,6 @@ const dateInput = document.querySelector('#datetime-picker');
 const startBtn = document.querySelector('button[data-start]');
 startBtn.disabled = true;
 let userSelectedDate = null; //! select date in milliseconds
-let saveInterval = null; //! interval time in milliseconds
 
 const daysEl = document.querySelector('span[data-days]');
 const hoursEl = document.querySelector('span[data-hours]');
@@ -31,44 +30,20 @@ const options = {
     }
     userSelectedDate = selectedDates[0];
     startBtn.disabled = false;
-    // startActive(userSelectedDate);
-    //   console.log(selectedDates[0]);
-    //   console.log(options.defaultDate - selectedDates[0]);
   },
 };
 
 flatpickr(dateInput, options);
 
-// dateInput.addEventListener('input', saveValue);
-
 startBtn.addEventListener('click', start);
-
-// function saveValue(e) {
-//   console.log(e.currentTarget);
-//   let a = flatpickr.parseDate(dateInput.value);
-//   userSelectedDate = a.getTime();
-//   intervalTime(userSelectedDate);
-// }
-
-// function startActive(a) {
-//   if (a > Date.now()) {
-//     startBtn.disabled = false;
-//   } else {
-//     startBtn.disabled = true;
-//
-//   }
-// }
-
-// function intervalTime(a) {
-//   saveInterval = a - Date.now();
-// } //! in a put select date in milliseconds, a = number; (userSelectedDate)
 
 function start() {
   updateInterval();
 }
 
 function updateInterval() {
-  setInterval(() => {
+  let intervalId = setInterval(() => {
+    dateInput.disabled = true;
     const currentDate = Date.now();
     let diff = userSelectedDate - currentDate;
     const { days, hours, minutes, seconds } = convertMs(diff);
@@ -77,23 +52,16 @@ function updateInterval() {
     hoursEl.textContent = String(hours).padStart(2, '0');
     minutesEl.textContent = String(minutes).padStart(2, '0');
     secondsEl.textContent = String(seconds).padStart(2, '0');
+    startBtn.disabled = true;
+    if (diff <= 1000) {
+      clearInterval(intervalId);
+      startBtn.disabled = false;
+      dateInput.disabled = false;
+    }
   }, 1000);
-  // let intervalId = setInterval(() => {
-  //   diff -= 1000;
-  //   showDateHtml(convertMs(diff));
-  //   if (diff > 0) {
-  //     startBtn.disabled = true;
-  //     dateInput.disabled = true;
-  //   } else {
-  //     clearInterval(intervalId);
-  //     startBtn.disabled = false;
-  //     dateInput.disabled = false;
-  //   }
-  // }, 1000);
 }
 
 function convertMs(ms) {
-  // Number of milliseconds per unit of time
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
@@ -110,5 +78,3 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
-
-function showDateHtml(data) {}
