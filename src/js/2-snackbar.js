@@ -19,40 +19,43 @@ fieldset.addEventListener('input', saveState);
 form.addEventListener('submit', createPromise);
 
 //!handle functions:
-function saveMs() {
-  milliseconds = event.target.value;
+function saveMs(event) {
+  milliseconds = Number(event.target.value);
 }
 
-function saveState() {
+function saveState(event) {
   event.target === radioF || event.target === radioR;
   selectState = event.target.value;
 }
 
-function createPromise() {
+function createPromise(event) {
   event.target === btn;
   event.preventDefault();
-  form.reset();
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (selectState === 'fulfilled') {
-        return resolve(milliseconds);
-      } else {
-        return reject(milliseconds);
-      }
-    }, milliseconds);
-  })
-    .then(function (delay) {
-      iziToast.show({
-        color: 'green',
-        message: `✅ Fulfilled promise in ${delay}ms`,
-        position: 'topRight',
-      });
+  // form.reset(); //! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  if (typeof milliseconds === 'number') {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (selectState === 'fulfilled') {
+          return resolve(milliseconds);
+        } else {
+          return reject(milliseconds);
+        }
+      }, milliseconds);
     })
-    .catch(function (delay) {
-      iziToast.show({
-        color: 'red',
-        message: `❌ Rejected promise in ${delay}ms`,
-        position: 'topRight',
-      });
-    });
+      .then(function (delay) {
+        iziToast.show({
+          color: 'green',
+          message: `✅ Fulfilled promise in ${delay}ms`,
+          position: 'topRight',
+        });
+      })
+      .catch(function (delay) {
+        iziToast.show({
+          color: 'red',
+          message: `❌ Rejected promise in ${delay}ms`,
+          position: 'topRight',
+        });
+      })
+      .finally(form.reset());
+  }
 }
